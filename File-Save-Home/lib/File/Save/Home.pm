@@ -6,50 +6,18 @@ BEGIN {
     use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
     $VERSION     = '0.01';
     @ISA         = qw(Exporter);
-    #Give a hoot don't pollute, do not export more than needed by default
     @EXPORT      = qw();
     @EXPORT_OK   = qw();
     %EXPORT_TAGS = ();
 }
 
+1;
 
-#################### subroutine header begin ####################
-
-=head2 sample_function
-
- Usage     : How to use this function/method
- Purpose   : What it does
- Returns   : What it returns
- Argument  : What it wants to know
- Throws    : Exceptions and other anomolies
- Comment   : This is a sample subroutine header.
-           : It is polite to include more pod and fewer comments.
-
-See Also   : 
-
-=cut
-
-#################### subroutine header end ####################
-
-
-sub new
-{
-    my ($class, %parameters) = @_;
-
-    my $self = bless ({}, ref ($class) || $class);
-
-    return $self;
-}
-
-
-#################### main pod documentation begin ###################
-## Below is the stub of documentation for your module. 
-## You better edit it!
-
+#################### DOCUMENTATION ###################
 
 =head1 NAME
 
-File::Save::Home - Place a file safely under user's home directory
+File::Save::Home - Place file safely under user home directory
 
 =head1 SYNOPSIS
 
@@ -88,7 +56,6 @@ Blah blah blah.
 
 	James E Keenan
 	CPAN ID: JKEENAN
-	
 	jkeenan@cpan.org
 	http://search.cpan.org/~jkeenan
 
@@ -107,9 +74,6 @@ perl(1).
 
 =cut
 
-#################### main pod documentation end ###################
 
 
-1;
-# The preceding line will help the module return a true value
 

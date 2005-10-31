@@ -7,7 +7,7 @@ WriteMakefile(
     NAME         => 'File::Save::Home',
     VERSION_FROM => 'lib/File/Save/Home.pm', # finds \$VERSION
     AUTHOR       => 'James E Keenan (jkeenan@cpan.org)',
-    ABSTRACT     => 'Place a file safely under user\'s home directory',
+    ABSTRACT     => 'Place file safely under user home directory',
     PREREQ_PM    => {
                      'Test::Simple' => 0.44,
                     },
