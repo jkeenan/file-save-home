@@ -10,5 +10,8 @@ WriteMakefile(
     ABSTRACT     => 'Place file safely under user home directory',
     PREREQ_PM    => {
                      'Test::Simple' => 0.44,
+                     'File::Spec'   => 0,
+                     'File::Path'   => 0,
+                     'Carp'         => 0,
                     },
 );

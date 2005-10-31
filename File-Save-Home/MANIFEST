@@ -4,4 +4,4 @@ LICENSE
 Todo
 Makefile.PL
 lib/File/Save/Home.pm
-t/001_load.t
+t/01_test.t
