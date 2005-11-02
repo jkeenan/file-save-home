@@ -106,9 +106,9 @@ sub get_subhome_directory_status {
     my $home = get_home_directory();
     my $dirname = "$home/$partial"; 
     if (-d $dirname) {
-        return [$dirname, 1];
+        return [$dirname, 1, $partial];
     } else {
-        return [$dirname, undef];
+        return [$dirname, undef, $partial];
     }
 }
 
@@ -141,11 +141,17 @@ it is left unchanged.
 
 =cut
 
+#sub rmfromtop {
+#    rmtree((File::Spec->splitdir(+shift))[0]);
+#}
+
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
     my $desired_dir = $desired_dir_ref->[0];
+    my $partial = $desired_dir_ref->[2];
     if (! defined $desired_dir_ref->[1]) {
-        rmtree($desired_dir, 0, 1);
+#        rmtree($partial, 1, 1);
+        rmtree((File::Spec->splitdir($partial))[0], 0, 1);
         if(! -d $desired_dir) {
             return 1;
         } else {
