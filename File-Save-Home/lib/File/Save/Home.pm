@@ -1,20 +1,16 @@
 package File::Save::Home;
+require 5.006_001;
 use strict;
-
+use warnings;
 use Exporter ();
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-$VERSION     = '0.01';
-@ISA         = qw(Exporter);
-@EXPORT      = qw();
-@EXPORT_OK   = qw(
+our $VERSION     = '0.01';
+our @ISA         = qw(Exporter);
+our @EXPORT_OK   = qw(
     get_home_directory
-    preexists_directory
+    get_subhome_directory_status
+    make_subhome_directory
+    restore_subhome_directory_status 
 );
-#        _get_mmkr_directory
-#        _preexists_mmkr_directory
-#        _make_mmkr_directory
-#        _restore_mmkr_dir_status
-%EXPORT_TAGS = ();
 use Carp;
 use File::Path;
 
@@ -28,12 +24,18 @@ File::Save::Home - Place file safely under user home directory
 
     use File::Save::Home qw(
         get_home_directory
-        preexists_directory
+        get_subhome_directory_status
+        make_subhome_directory
+        restore_subhome_directory_status 
    );
 
     $home_dir = get_home_directory();
 
-    $dir_ref = preexists_directory("desired/directory");
+    $desired_dir_ref = get_subhome_directory_status("desired/directory");
+
+    $desired_dir = make_subhome_directory($desired_dir_ref);
+
+    restore_subhome_directory_status($desired_dir_ref);
 
 =head1 DESCRIPTION
 
@@ -78,7 +80,7 @@ sub get_home_directory {
     }
 }
 
-=head2 C<preexists_directory()>
+=head2 C<get_subhome_directory_status()>
 
 Determines whether a specified directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
@@ -88,7 +90,7 @@ true value) or not  (C<undef>).
 
 =cut
 
-sub preexists_directory {
+sub get_subhome_directory_status {
     my $partial = shift;
     my $home = get_home_directory();
     my $dirname = "$home/$partial"; 
@@ -96,6 +98,50 @@ sub preexists_directory {
         return [$dirname, 1];
     } else {
         return [$dirname, undef];
+    }
+}
+
+=head2 C<make_subhome_directory()>
+
+Takes as argument the array reference returned by
+C<get_subhome_directory_status()>. Examines the first element in that array --
+the directory name -- and creates the directory if it doesn't already exist.
+The function C<croak>s if the directory cannot be created.
+
+=cut
+
+sub make_subhome_directory {
+    my $desired_dir_ref = shift;
+    my $dirname = $desired_dir_ref->[0];
+    if (! -d $dirname) {
+        mkpath $dirname
+            or croak "Unable to make directory $dirname for placement of personal defaults file or subclass: $!";
+    }
+    return $dirname;
+}
+
+=head2 C<restore_subhome_directory_status()>
+
+Undoes C<make_subhome_directory()>, I<i.e.,> if there was no specified 
+directory under the user's home directory on the user's system before 
+testing, any such directory created during testing is removed.  On the 
+other hand, if there I<was> such a directory present before testing, 
+it is left unchanged.
+
+=cut
+
+sub restore_subhome_directory_status {
+    my $desired_dir_ref = shift;
+    my $desired_dir = $desired_dir_ref->[0];
+    if (! defined $desired_dir_ref->[1]) {
+        rmtree($desired_dir, 0, 1);
+        if(! -d $desired_dir) {
+            return 1;
+        } else {
+            croak "Unable to restore .modulemaker directory created during test: $!";
+        }
+    } else {
+        return 1;
     }
 }
 
