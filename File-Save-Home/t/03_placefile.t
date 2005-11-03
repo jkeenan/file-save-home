@@ -3,8 +3,8 @@ use strict;
 use warnings;
 
 use Test::More 
-# tests => 15;
-qw(no_plan);
+tests => 18;
+# qw(no_plan);
 
 use_ok('File::Save::Home', qw|
     get_home_directory
@@ -26,18 +26,21 @@ $cwd = cwd();
 
 ok(chdir $homedir, "able to change to $homedir");
 
+# Test a multilevel directory
+my $topdir = mkdirname();
+my $nextdir = mkdirname();
+
 $desired_dir_ref = 
-    get_subhome_directory_status(mkdirname() . "/" . mkdirname());
-ok(! defined $desired_dir_ref->[1], 
-    "random directory name $desired_dir_ref->[0] is undefined");
+    get_subhome_directory_status("$topdir/$nextdir");
+ok(! defined $desired_dir_ref->{flag}, 
+    "random directory name $desired_dir_ref->{abs} is undefined");
 
 $desired_dir = make_subhome_directory($desired_dir_ref);
 ok(-d $desired_dir,
-    "randomly named directory $desired_dir_ref->[0] has been created");
+    "randomly named directory $desired_dir_ref->{abs} has been created");
 
 $target = 'file_to_be_checked';
-my $FH;
-open ($FH, ">$desired_dir/$target") 
+open my $FH, ">$desired_dir/$target" 
     or die "Unable to open filehandle: $!";
 print $FH "\n";
 close $FH or die "Unable to close filehandle: $!";
@@ -58,7 +61,9 @@ ok(restore_subhome_directory_status($desired_dir_ref),
     "directory status restored");
 
 ok(! -d $desired_dir, 
-    "randomly named directory $desired_dir_ref->[0] has been deleted");
+    "randomly named directory $desired_dir_ref->{abs} has been deleted");
+ok(! -d $topdir,
+    "top directory $topdir has been deleted");
 
 ok(chdir $cwd, "able to change back to $cwd");
 

@@ -95,9 +95,26 @@ sub get_home_directory {
 
 Determines whether a specified directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
-then tacks on the path passed as argument. Returns a reference to an array 
-holding a two-element list.  The first element is the complete directory name.  The second is a flag indicating whether that directory already exists (a 
-true value) or not  (C<undef>).
+then tacks on the path passed as argument. Returns a reference to a
+three-element hash whose keys are:
+
+=over 4
+
+=item arg
+
+The path passed as the argument to this function.  (It's simply passed out
+again because it is needed as an argument to another function.)
+
+=item abs
+
+The absolute path of the specified directory.
+
+=item flag
+
+A Boolean value indicating whether that directory already exists (a true value) 
+or not (C<undef>).
+
+=back
 
 =cut
 
@@ -106,9 +123,19 @@ sub get_subhome_directory_status {
     my $home = get_home_directory();
     my $dirname = "$home/$partial"; 
     if (-d $dirname) {
-        return [$dirname, 1, $partial];
+#        return [$dirname, 1, $partial];
+        return {
+            arg     => $partial,
+            abs     => $dirname,
+            flag    => 1,
+       };
     } else {
-        return [$dirname, undef, $partial];
+#        return [$dirname, undef, $partial];
+        return {
+            arg     => $partial,
+            abs     => $dirname,
+            flag    => undef,
+       };
     }
 }
 
@@ -123,7 +150,8 @@ The function C<croak>s if the directory cannot be created.
 
 sub make_subhome_directory {
     my $desired_dir_ref = shift;
-    my $dirname = $desired_dir_ref->[0];
+#    my $dirname = $desired_dir_ref->[0];
+    my $dirname = $desired_dir_ref->{abs};
     if (! -d $dirname) {
         mkpath $dirname
             or croak "Unable to create desired directory $dirname: $!";
@@ -143,9 +171,12 @@ it is left unchanged.
 
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
-    my $desired_dir = $desired_dir_ref->[0];
-    my $partial = $desired_dir_ref->[2];
-    if (! defined $desired_dir_ref->[1]) {
+#    my $desired_dir = $desired_dir_ref->[0];
+#    my $partial = $desired_dir_ref->[2];
+#    if (! defined $desired_dir_ref->[1]) {
+    my $desired_dir = $desired_dir_ref->{abs};
+    my $partial = $desired_dir_ref->{arg};
+    if (! defined $desired_dir_ref->{flag}) {
         rmtree((File::Spec->splitdir($partial))[0], 0, 1);
         if(! -d $desired_dir) {
             return 1;
@@ -316,5 +347,10 @@ perl(1).
 
 1;
 
+__END__
+
+then tacks on the path passed as argument. Returns a reference to an array 
+holding a two-element list.  The first element is the complete directory name.  The second is a flag indicating whether that directory already exists (a 
+true value) or not  (C<undef>).
 
 

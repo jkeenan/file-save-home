@@ -41,26 +41,26 @@ ok(chdir $homedir, "able to change to $homedir");
 if (@subdirs) {
     my $testdir = $subdirs[int(rand(@subdirs))];
     $desired_dir_ref = get_subhome_directory_status($testdir);
-    ok($desired_dir_ref->[1], "confirm existence of $testdir under $homedir");
+    ok($desired_dir_ref->{flag}, "confirm existence of $testdir under $homedir");
 } else {
     $desired_dir_ref = get_subhome_directory_status(mkdirname());
-    ok(! defined $desired_dir_ref->[1], 
+    ok(! defined $desired_dir_ref->{flag}, 
         "random directory name under $homedir is undefined");
 }
 
 $desired_dir_ref = get_subhome_directory_status(mkdirname());
-ok(! defined $desired_dir_ref->[1], 
-    "random directory name $desired_dir_ref->[0] is undefined");
+ok(! defined $desired_dir_ref->{flag}, 
+    "random directory name $desired_dir_ref->{abs} is undefined");
 
 $desired_dir = make_subhome_directory($desired_dir_ref);
 ok(-d $desired_dir,
-    "randomly named directory $desired_dir_ref->[0] has been created");
+    "randomly named directory $desired_dir_ref->{abs} has been created");
 
 ok(restore_subhome_directory_status($desired_dir_ref),
     "directory status restored");
 
 ok(! -d $desired_dir, 
-    "randomly named directory $desired_dir_ref->[0] has been deleted");
+    "randomly named directory $desired_dir_ref->{abs} has been deleted");
 
 ok(chdir $cwd, "able to change back to $cwd");
 
