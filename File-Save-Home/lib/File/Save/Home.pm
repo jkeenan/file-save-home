@@ -15,7 +15,10 @@ our @EXPORT_OK   = qw(
 );
 use Carp;
 use File::Path;
-use File::Spec;
+use File::Spec::Functions qw|
+    catfile
+    splitdir
+|;
 *ok = *Test::More::ok;
 
 #################### DOCUMENTATION ###################
@@ -123,14 +126,12 @@ sub get_subhome_directory_status {
     my $home = get_home_directory();
     my $dirname = "$home/$partial"; 
     if (-d $dirname) {
-#        return [$dirname, 1, $partial];
         return {
             arg     => $partial,
             abs     => $dirname,
             flag    => 1,
        };
     } else {
-#        return [$dirname, undef, $partial];
         return {
             arg     => $partial,
             abs     => $dirname,
@@ -150,7 +151,6 @@ The function C<croak>s if the directory cannot be created.
 
 sub make_subhome_directory {
     my $desired_dir_ref = shift;
-#    my $dirname = $desired_dir_ref->[0];
     my $dirname = $desired_dir_ref->{abs};
     if (! -d $dirname) {
         mkpath $dirname
@@ -171,13 +171,10 @@ it is left unchanged.
 
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
-#    my $desired_dir = $desired_dir_ref->[0];
-#    my $partial = $desired_dir_ref->[2];
-#    if (! defined $desired_dir_ref->[1]) {
     my $desired_dir = $desired_dir_ref->{abs};
     my $partial = $desired_dir_ref->{arg};
     if (! defined $desired_dir_ref->{flag}) {
-        rmtree((File::Spec->splitdir($partial))[0], 0, 1);
+        rmtree((splitdir($partial))[0], 0, 1);
         if(! -d $desired_dir) {
             return 1;
         } else {
@@ -249,8 +246,8 @@ sub process_target_file {
     my $test_flag   = $arg_ref->{test};
     my $target_file_hidden = $target_file . '.hidden';
     my %targ;
-    $targ{full} = File::Spec->catfile( $desired_dir, $target_file );
-    $targ{hidden} = File::Spec->catfile( $desired_dir, $target_file_hidden );
+    $targ{full} = catfile( $desired_dir, $target_file );
+    $targ{hidden} = catfile( $desired_dir, $target_file_hidden );
     if (-f $targ{full}) {
         $targ{atime}   = (stat($targ{full}))[8];
         $targ{modtime} = (stat($targ{full}))[9];
@@ -309,6 +306,7 @@ sub reprocess_target_file {
     }
 }
 
+
 =head1 BUGS
 
 
@@ -346,11 +344,4 @@ perl(1).
 =cut
 
 1;
-
-__END__
-
-then tacks on the path passed as argument. Returns a reference to an array 
-holding a two-element list.  The first element is the complete directory name.  The second is a flag indicating whether that directory already exists (a 
-true value) or not  (C<undef>).
-
 
