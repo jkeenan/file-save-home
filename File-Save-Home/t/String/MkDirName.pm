@@ -1,5 +1,20 @@
 package String::MkDirName;
 
+=pod
+
+This is a hack on Chris Grau's CPAN module String::MkPasswd (L<http://search.cpan.org/~cgrau/String-MkPasswd-0.02/>).  I'm using
+it temporarily while testing  File::Save::Home, but will eventually suggest
+patches to Chris.
+
+The current title is misleading, because the strings I am creating herewith
+are more constrained than Unix or Windows file or directory names.  Currently,
+I'm creating something like legal Perl variables -- only numerals, English
+upper- and lower-case letters and the underscore character are permitted --
+but not quite (because I'm not yet prohibiting numerals in the first
+position).
+
+=cut
+
 use 5.006001;
 use strict;
 use base qw(Exporter);
