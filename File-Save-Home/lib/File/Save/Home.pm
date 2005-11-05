@@ -54,6 +54,21 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 DESCRIPTION
 
+In the course of deploying an application on another user's system, you
+sometimes need to place a file in or underneath that user's home
+directory.  Can you safely do so?
+
+This Perl extension provides several functions which try to determine whether
+you can, indeed, safely create directories and files underneath a user's home
+directory.  ''Safely'' does not simply mean that you can write to that
+directory.  It also means that if you are permanently placing a file in such 
+a location, your application does not overwrite any file with the same name 
+already existing there unless the user explicitly authorizes you to do so.  On
+the other hand, if you are placing a file in such a location only temporarily
+-- say, for testing purposes -- you can temporarily hide any already existing
+file with the same name and restore it to its original name and timestamps
+when you are done.
+
 =head1 USAGE
 
 =head2 C<get_home_directory()>
@@ -307,19 +322,22 @@ sub reprocess_target_file {
 }
 
 
-=head1 BUGS
+=head1 BUGS AND TODO
 
-
-
-=head1 SUPPORT
-
-
+So far only the ''place a file temporarily in a user's home directory'' aspect
+of File::Save::Home mentioned in the DESCRIPTION above has been implemented.
+I have not yet implemented the ''only place a file permanently if the user
+explicitly agrees'' aspect.
 
 =head1 HISTORY
 
 0.01 Mon Oct 31 09:55:38 2005
-    - original version; created by ExtUtils::ModuleMaker 0.43
-
+Original version; created by ExtUtils::ModuleMaker 0.43.  Adapted from
+functions in ExtUtils::ModuleMaker::Auxiliary and
+ExtUtils::ModuleMaker::Utility.  After I made a presentation to the Toronto
+Perlmongers on October 27, 2005, Michael Graham suggested that these functions
+could be extracted to a separate Perl extention for more general
+applicability.
 
 =head1 AUTHOR
 
@@ -339,7 +357,7 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+perl(1).  ExtUtils::ModuleMaker::Auxiliary.  ExtUtils::ModuleMaker::Utility.
 
 =cut
 
