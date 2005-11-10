@@ -38,7 +38,9 @@ This document refers to version 0.02, released November 9, 2005.
         get_subhome_directory_status
         make_subhome_directory
         restore_subhome_directory_status 
-   );
+        process_target_file 
+        reprocess_target_file 
+    );
 
     $home_dir = get_home_directory();
 
@@ -224,8 +226,8 @@ exists.
 
 =item test
 
-Boolean value which, if turned on (C<1>), will cause the function, when called, to
-run two C<Test::More::ok()> tests.  Defaults to off (C<0>).
+Boolean value which, if turned on (C<1>), will cause the function, when 
+called, to run two C<Test::More::ok()> tests.  Defaults to off (C<0>).
 
 =back
 
@@ -293,11 +295,10 @@ status of the file targeted by C<process_target_file()>, I<i.e.,> renames the
 hidden file to its original name by removing the F<.hidden> suffix, thereby
 deleting any other file with the original name created between the calls tothe
 two functions.  C<croak>s if the hidden file cannot be renamed.  Takes as 
-argument
-the hash reference returned by C<process_target_file()>.  If the value for the
-C<test> key in the hash passed as an argument to C<process_target_file()> was
-true, then a call to C<reprocess_target_file> will run three
-C<Test::More::ok()> tests.
+argument the hash reference returned by C<process_target_file()>.  If the 
+value for the C<test> key in the hash passed as an argument to 
+C<process_target_file()> was true, then a call to C<reprocess_target_file> 
+will run three C<Test::More::ok()> tests.
 
 =cut
 
