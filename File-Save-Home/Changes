@@ -1,0 +1,15 @@
+Changes for Perl extension File::Save::Home
+
+0.02 Wed Nov  9 20:43:18 2005
+
+Began to reformulate in response to feedback on 0.01 from Michael Graham.
+
+0.01 Mon Oct 31 09:55:38 2005
+Original version; created by ExtUtils::ModuleMaker 0.43.  Adapted from
+functions in ExtUtils::ModuleMaker::Auxiliary and
+ExtUtils::ModuleMaker::Utility.  After I made a presentation to the Toronto
+Perlmongers on October 27, 2005, Michael Graham suggested that these functions
+could be extracted to a separate Perl extention for more general
+applicability.
+
+

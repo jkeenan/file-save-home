@@ -3,7 +3,7 @@ require 5.006_001;
 use strict;
 use warnings;
 use Exporter ();
-our $VERSION     = '0.01';
+our $VERSION     = '0.02';
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw(
     get_home_directory
@@ -26,6 +26,10 @@ use File::Spec::Functions qw|
 =head1 NAME
 
 File::Save::Home - Place file safely under user home directory
+
+=head1 VERSION
+
+This document refers to version 0.02, released November 9, 2005.
 
 =head1 SYNOPSIS
 
@@ -328,16 +332,6 @@ So far only the ''place a file temporarily in a user's home directory'' aspect
 of File::Save::Home mentioned in the DESCRIPTION above has been implemented.
 I have not yet implemented the ''only place a file permanently if the user
 explicitly agrees'' aspect.
-
-=head1 HISTORY
-
-0.01 Mon Oct 31 09:55:38 2005
-Original version; created by ExtUtils::ModuleMaker 0.43.  Adapted from
-functions in ExtUtils::ModuleMaker::Auxiliary and
-ExtUtils::ModuleMaker::Utility.  After I made a presentation to the Toronto
-Perlmongers on October 27, 2005, Michael Graham suggested that these functions
-could be extracted to a separate Perl extention for more general
-applicability.
 
 =head1 AUTHOR
 
