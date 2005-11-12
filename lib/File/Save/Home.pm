@@ -12,6 +12,7 @@ our @EXPORT_OK   = qw(
     restore_subhome_directory_status 
     conceal_target_file 
     reveal_target_file 
+    make_subhome_temp_directory 
 );
 use Carp;
 use File::Path;
@@ -19,6 +20,7 @@ use File::Spec::Functions qw|
     catfile
     splitdir
 |;
+use File::Temp qw| tempdir |;
 *ok = *Test::More::ok;
 
 #################### DOCUMENTATION ###################
@@ -40,6 +42,7 @@ This document refers to version 0.02, released November 9, 2005.
         restore_subhome_directory_status 
         conceal_target_file 
         reveal_target_file 
+        make_subhome_temp_directory 
     );
 
     $home_dir = get_home_directory();
@@ -57,6 +60,8 @@ This document refers to version 0.02, released November 9, 2005.
     } );
 
     reveal_target_file($target_ref);
+
+    $tmpdir = make_subhome_temp_directory;
 
 =head1 DESCRIPTION
 
@@ -126,11 +131,6 @@ three-element hash whose keys are:
 
 =over 4
 
-=item arg
-
-The path passed as the argument to this function.  (It's simply passed out
-again because it is needed as an argument to another function.)
-
 =item abs
 
 The absolute path of the specified directory.
@@ -140,23 +140,29 @@ The absolute path of the specified directory.
 A Boolean value indicating whether that directory already exists (a true value) 
 or not (C<undef>).
 
+=item top
+
+The uppermost subdirectory passed as the argument to this function.
+
 =back
 
 =cut
 
 sub get_subhome_directory_status {
-    my $partial = shift;
+    my $subdir = shift;
     my $home = get_home_directory();
-    my $dirname = "$home/$partial"; 
+    my $dirname = "$home/$subdir"; 
+    my $subdir_top = (splitdir($subdir))[0];
+    
     if (-d $dirname) {
         return {
-            arg     => $partial,
+            top     => $subdir_top,
             abs     => $dirname,
             flag    => 1,
        };
     } else {
         return {
-            arg     => $partial,
+            top     => $subdir_top,
             abs     => $dirname,
             flag    => undef,
        };
@@ -195,17 +201,33 @@ it is left unchanged.
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
     my $desired_dir = $desired_dir_ref->{abs};
-    my $partial = $desired_dir_ref->{arg};
+    my $subdir_top = $desired_dir_ref->{top};
     if (! defined $desired_dir_ref->{flag}) {
-        rmtree((splitdir($partial))[0], 0, 1);
-        if(! -d $desired_dir) {
-            return 1;
-        } else {
-            croak "Unable to restore directory created during test: $!";
-        }
+        rmtree((splitdir($subdir_top))[0], 0, 1);
+        (! -d $desired_dir) 
+            ? return 1
+            : croak "Unable to restore directory created during test: $!";
     } else {
         return 1;
     }
+}
+
+=head2 C<make_subhome_temp_directory()>
+
+Creates a randomly named temporary directory underneath the home or
+home-equivalent directory returned by C<get_home_directory()>.  This is
+accomplished by use of C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.  
+Returns the directory path if succesful; C<croak>s otherwise.
+
+B<Note:>  Any temporary directory so created remains in existence for 
+the duration of the program, but should be deleted (along with all its 
+contents) when the program exits.
+
+=cut
+
+sub make_subhome_temp_directory {
+    my $tdir = tempdir(DIR => get_home_directory(), CLEANUP => 1);
+    return $tdir ? $tdir : croak "Unable to create temp dir under home: $!";
 }
 
 =head2 C<conceal_target_file()>
