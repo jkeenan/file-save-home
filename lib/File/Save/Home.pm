@@ -10,8 +10,8 @@ our @EXPORT_OK   = qw(
     get_subhome_directory_status
     make_subhome_directory
     restore_subhome_directory_status 
-    process_target_file 
-    reprocess_target_file 
+    conceal_target_file 
+    reveal_target_file 
 );
 use Carp;
 use File::Path;
@@ -38,8 +38,8 @@ This document refers to version 0.02, released November 9, 2005.
         get_subhome_directory_status
         make_subhome_directory
         restore_subhome_directory_status 
-        process_target_file 
-        reprocess_target_file 
+        conceal_target_file 
+        reveal_target_file 
     );
 
     $home_dir = get_home_directory();
@@ -50,13 +50,13 @@ This document refers to version 0.02, released November 9, 2005.
 
     restore_subhome_directory_status($desired_dir_ref);
 
-    $target_ref = process_target_file( {
+    $target_ref = conceal_target_file( {
         dir     => $desired_dir,
         file    => 'file_to_be_checked',
         test    => 0,
     } );
 
-    reprocess_target_file($target_ref);
+    reveal_target_file($target_ref);
 
 =head1 DESCRIPTION
 
@@ -117,7 +117,9 @@ sub get_home_directory {
 
 =head2 C<get_subhome_directory_status()>
 
-Determines whether a specified directory already exists underneath the user's
+Takes as argument a string holding the name of a directory, either
+single-level (C<mydir/>) or multi-level (C<path/to/mydir/>).  Determines 
+whether that  directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
 then tacks on the path passed as argument. Returns a reference to a
 three-element hash whose keys are:
@@ -206,7 +208,7 @@ sub restore_subhome_directory_status {
     }
 }
 
-=head2 C<process_target_file()>
+=head2 C<conceal_target_file()>
 
 Determines whether file with specified name already exists in specified
 directory and, if so, temporarily hides it by renaming it with a F<.hidden>
@@ -260,7 +262,7 @@ this function.
 
 =cut
 
-sub process_target_file {
+sub conceal_target_file {
     my $arg_ref = shift;
     my $desired_dir = $arg_ref->{dir};
     my $target_file = $arg_ref->{file};
@@ -288,21 +290,21 @@ sub process_target_file {
     return { %targ };
 }
 
-=head2 C<reprocess_target_file()>
+=head2 C<reveal_target_file()>
 
-Used in conjunction with C<process_target_file()> to restore the original
-status of the file targeted by C<process_target_file()>, I<i.e.,> renames the
+Used in conjunction with C<conceal_target_file()> to restore the original
+status of the file targeted by C<conceal_target_file()>, I<i.e.,> renames the
 hidden file to its original name by removing the F<.hidden> suffix, thereby
 deleting any other file with the original name created between the calls tothe
 two functions.  C<croak>s if the hidden file cannot be renamed.  Takes as 
-argument the hash reference returned by C<process_target_file()>.  If the 
+argument the hash reference returned by C<conceal_target_file()>.  If the 
 value for the C<test> key in the hash passed as an argument to 
-C<process_target_file()> was true, then a call to C<reprocess_target_file> 
+C<conceal_target_file()> was true, then a call to C<reveal_target_file> 
 will run three C<Test::More::ok()> tests.
 
 =cut
 
-sub reprocess_target_file {
+sub reveal_target_file {
     my $target_ref = shift;;
     if(-f $target_ref->{hidden} ) {
         rename $target_ref->{hidden}, $target_ref->{full},

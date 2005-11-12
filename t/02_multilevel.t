@@ -11,8 +11,8 @@ use_ok('File::Save::Home', qw|
     get_subhome_directory_status
     make_subhome_directory
     restore_subhome_directory_status 
-    process_target_file 
-    reprocess_target_file 
+    conceal_target_file 
+    reveal_target_file 
 | );
 use lib ("t/");
 use_ok('String::MkDirName', qw|mkdirname|);
@@ -38,13 +38,13 @@ $desired_dir = make_subhome_directory($desired_dir_ref);
 ok(-d $desired_dir,
     "randomly named directory $desired_dir_ref->{abs} has been created");
 
-$target_ref = process_target_file( {
+$target_ref = conceal_target_file( {
     dir     => $desired_dir,
     file    => 'file_to_be_checked',
     test    => 1,
 } );
 
-reprocess_target_file($target_ref);
+reveal_target_file($target_ref);
 
 ok(restore_subhome_directory_status($desired_dir_ref),
     "directory status restored");

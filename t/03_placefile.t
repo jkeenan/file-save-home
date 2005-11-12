@@ -11,8 +11,8 @@ use_ok('File::Save::Home', qw|
     get_subhome_directory_status
     make_subhome_directory
     restore_subhome_directory_status 
-    process_target_file 
-    reprocess_target_file 
+    conceal_target_file 
+    reveal_target_file 
 | );
 use lib ("t/");
 use_ok('String::MkDirName', qw|mkdirname|);
@@ -47,13 +47,13 @@ close $FH or die "Unable to close filehandle: $!";
 
 ok(-f "$desired_dir/$target", "target file created for testing");
 
-$target_ref = process_target_file( {
+$target_ref = conceal_target_file( {
     dir     => $desired_dir,
     file    => $target,
     test    => 1,
 } );
 
-reprocess_target_file($target_ref);
+reveal_target_file($target_ref);
 
 ok(-f "$desired_dir/$target", "target file restored after testing");
 
