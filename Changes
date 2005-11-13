@@ -1,5 +1,10 @@
 Changes for Perl extension File::Save::Home
 
+0.03 Sat Nov 12 21:38:00 2005
+
+Forgot to include File::Temp under PREREQ_PM in Makefile.PL.
+
+
 0.02 Sat Nov 12 21:15:00 2005
 
 Reformulated in response to feedback on 0.01 from Michael Graham.  First
