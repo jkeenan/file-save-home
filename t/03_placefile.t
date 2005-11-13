@@ -15,7 +15,7 @@ use_ok('File::Save::Home', qw|
     reveal_target_file 
 | );
 use lib ("t/");
-use_ok('String::MkDirName', qw|mkdirname|);
+use_ok('String::MkVarName', qw|make_varname|);
 use_ok('Cwd');
 
 my ($cwd, $homedir, @subdirs, $desired_dir_ref, $desired_dir, $target_ref,
@@ -27,8 +27,8 @@ $cwd = cwd();
 ok(chdir $homedir, "able to change to $homedir");
 
 # Test a multilevel directory
-my $topdir = mkdirname();
-my $nextdir = mkdirname();
+my $topdir = make_varname();
+my $nextdir = make_varname();
 
 $desired_dir_ref = 
     get_subhome_directory_status("$topdir/$nextdir");

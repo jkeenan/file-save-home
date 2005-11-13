@@ -13,7 +13,6 @@ use_ok('File::Save::Home', qw|
     restore_subhome_directory_status 
 | );
 use lib ("t/");
-# use_ok('String::MkDirName', qw|mkdirname|);
 use_ok('String::MkVarName', qw|make_varname|);
 use_ok('Cwd');
 
@@ -44,13 +43,11 @@ if (@subdirs) {
     $desired_dir_ref = get_subhome_directory_status($testdir);
     ok($desired_dir_ref->{flag}, "confirm existence of $testdir under $homedir");
 } else {
-#    $desired_dir_ref = get_subhome_directory_status(mkdirname());
     $desired_dir_ref = get_subhome_directory_status(make_varname());
     ok(! defined $desired_dir_ref->{flag}, 
         "random directory name under $homedir is undefined");
 }
 
-# $desired_dir_ref = get_subhome_directory_status(mkdirname());
 $desired_dir_ref = get_subhome_directory_status(make_varname());
 ok(! defined $desired_dir_ref->{flag}, 
     "random directory name $desired_dir_ref->{abs} is undefined");

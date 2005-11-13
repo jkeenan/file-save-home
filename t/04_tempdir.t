@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests =>  7;
+use Test::More tests =>  9;
 
 use_ok('File::Save::Home', qw|
     get_home_directory
@@ -10,9 +10,11 @@ use_ok('File::Save::Home', qw|
 | );
 use_ok('File::Spec::Functions', qw| splitdir |);
 use_ok('File::Temp', qw| tempdir |);
+use_ok('Cwd');
 
 
-my $homedir;
+my ($cwd, $homedir);
+$cwd = cwd();
 
 ok($homedir = get_home_directory(), 'home directory is defined');
 ok(chdir $homedir, "able to change to $homedir");
@@ -31,3 +33,5 @@ my @tmpdirels = splitdir($tmpdir);
 shift(@tmpdirels) for @homedirels;
 ok(! exists $subdirs{$tmpdirels[0]}, 
     "directory $tmpdirels[0] did not previously exist");
+
+ok(chdir $cwd, "able to change to $cwd");

@@ -14,6 +14,16 @@ our @EXPORT_OK   = qw(
     reveal_target_file 
     make_subhome_temp_directory 
 );
+our %EXPORT_TAGS = (
+    subhome_status => [ qw|
+        get_subhome_directory_status
+        restore_subhome_directory_status 
+    | ],
+    target => [ qw|
+        conceal_target_file 
+        reveal_target_file 
+    | ],
+);
 use Carp;
 use File::Path;
 use File::Spec::Functions qw|
@@ -31,7 +41,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.02, released November 9, 2005.
+This document refers to version 0.02, released November 12, 2005.
 
 =head1 SYNOPSIS
 
@@ -67,26 +77,22 @@ This document refers to version 0.02, released November 9, 2005.
 
 In the course of deploying an application on another user's system, you
 sometimes need to place a file in or underneath that user's home
-directory.  Can you safely do so?
+directory.  Can you do so safely?
 
 This Perl extension provides several functions which try to determine whether
 you can, indeed, safely create directories and files underneath a user's home
-directory.  ''Safely'' does not simply mean that you can write to that
-directory.  It also means that if you are permanently placing a file in such 
-a location, your application does not overwrite any file with the same name 
-already existing there unless the user explicitly authorizes you to do so.  On
-the other hand, if you are placing a file in such a location only temporarily
--- say, for testing purposes -- you can temporarily hide any already existing
-file with the same name and restore it to its original name and timestamps
-when you are done.
+directory.  Among other things, if you are placing a file in such a location 
+only temporarily -- say, for testing purposes -- you can temporarily hide 
+any already existing file with the same name and restore it to its original 
+name and timestamps when you are done.
 
 =head1 USAGE
 
 =head2 C<get_home_directory()>
 
 Analyzes environmental information to determine whether there exists on the
-system a 'HOME' or 'home-equivalent' directory.  Returns that directory if it
-exists; C<croak>s otherwise.
+system a 'HOME' or 'home-equivalent' directory.  Takes no arguments.  Returns 
+that directory if it exists; C<croak>s otherwise.
 
 On Win32, this directory is the one returned by the following function from the F<Win32>module:
 
@@ -96,8 +102,8 @@ On Win32, this directory is the one returned by the following function from the 
 ... which translates to something like F<C:\Documents and Settings\localuser\Local Settings\Application Data>.  
 
 On Unix-like systems, things are much simpler.  We simply check the value of
-C<$ENV{HOME}>.  We cannot do that on Win32 (at least not on ActivePerl),
-because C<$ENV{HOME}> is not defined there.
+C<$ENV{HOME}>.  We cannot do that on Win32 because C<$ENV{HOME}> is not 
+defined there.
 
 =cut
 
@@ -123,7 +129,7 @@ sub get_home_directory {
 =head2 C<get_subhome_directory_status()>
 
 Takes as argument a string holding the name of a directory, either
-single-level (C<mydir/>) or multi-level (C<path/to/mydir/>).  Determines 
+single-level (C<mydir>) or multi-level (C<path/to/mydir>).  Determines 
 whether that  directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
 then tacks on the path passed as argument. Returns a reference to a
@@ -171,7 +177,7 @@ sub get_subhome_directory_status {
 
 =head2 C<make_subhome_directory()>
 
-Takes as argument the array reference returned by
+Takes as argument the hash reference returned by
 C<get_subhome_directory_status()>. Examines the first element in that array --
 the directory name -- and creates the directory if it doesn't already exist.
 The function C<croak>s if the directory cannot be created.
@@ -220,8 +226,8 @@ accomplished by use of C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.
 Returns the directory path if succesful; C<croak>s otherwise.
 
 B<Note:>  Any temporary directory so created remains in existence for 
-the duration of the program, but should be deleted (along with all its 
-contents) when the program exits.
+the duration of the program, but is deleted (along with all its contents) 
+when the program exits.
 
 =cut
 
@@ -353,10 +359,7 @@ sub reveal_target_file {
 
 =head1 BUGS AND TODO
 
-So far only the ''place a file temporarily in a user's home directory'' aspect
-of File::Save::Home mentioned in the DESCRIPTION above has been implemented.
-I have not yet implemented the ''only place a file permanently if the user
-explicitly agrees'' aspect.
+So far tested only on Unix-like systems and Win32.
 
 =head1 AUTHOR
 
@@ -365,6 +368,15 @@ explicitly agrees'' aspect.
 	jkeenan@cpan.org
 	http://search.cpan.org/~jkeenan
 
+=head1 ACKNOWLEDGMENTS
+
+The subroutines in this module draw upon subroutines in
+ExtUtils::ModuleMaker::Auxiliary and ExtUtils::ModuleMaker::Utility.  
+After I made a presentation to the Toronto Perlmongers on October 27, 2005, 
+Michael Graham suggested that these functions could be extracted to a 
+separate Perl extention for more general applicability.  This module is the
+implementation of Michael's suggestion.
+
 =head1 COPYRIGHT
 
 This program is free software; you can redistribute
@@ -372,7 +384,6 @@ it and/or modify it under the same terms as Perl itself.
 
 The full text of the license can be found in the
 LICENSE file included with this module.
-
 
 =head1 SEE ALSO
 
