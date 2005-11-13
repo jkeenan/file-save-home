@@ -1,15 +1,34 @@
 Changes for Perl extension File::Save::Home
 
-0.02 Wed Nov  9 20:43:18 2005
+0.02 Sat Nov 12 21:15:00 2005
 
-Began to reformulate in response to feedback on 0.01 from Michael Graham.
+Reformulated in response to feedback on 0.01 from Michael Graham.  First
+general release version.  lib/File/Save/Home.pm exports seven functions on
+request:
+
+    get_home_directory
+    get_subhome_directory_status
+    make_subhome_directory
+    restore_subhome_directory_status 
+    conceal_target_file 
+    reveal_target_file 
+    make_subhome_temp_directory 
+
+There are 4 files in the test suite:
+
+    01_test.t
+    02_multilevel.t
+    03_placefile.t
+    04_tempdir.t
+
+Underneath the t/ directory there is found package String::MkVarName, which
+exports one function:
+
+    make_varname
+
+CPAN upload.
+
 
 0.01 Mon Oct 31 09:55:38 2005
-Original version; created by ExtUtils::ModuleMaker 0.43.  Adapted from
-functions in ExtUtils::ModuleMaker::Auxiliary and
-ExtUtils::ModuleMaker::Utility.  After I made a presentation to the Toronto
-Perlmongers on October 27, 2005, Michael Graham suggested that these functions
-could be extracted to a separate Perl extention for more general
-applicability.
 
-
+Original version; created by ExtUtils::ModuleMaker 0.43.
