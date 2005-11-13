@@ -1,5 +1,12 @@
 Changes for Perl extension File::Save::Home
 
+0.04 Sun Nov 13 08:46:00 EST 2005
+
+Reworked restore_subhome_directory_status to use code from Perl Cookbook
+recipe 9.8, rmtree1, to remove directory and its contents.  In test files,
+either eliminated chdir-ing to home directory entirely, or limited its scope
+to minimum necessary.
+
 0.03 Sat Nov 12 21:38:00 2005
 
 Forgot to include File::Temp under PREREQ_PM in Makefile.PL.

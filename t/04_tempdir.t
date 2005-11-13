@@ -25,6 +25,8 @@ my %subdirs =  map {$_, 1}
             readdir($DIRH);
 closedir $DIRH or die "Unable to close $homedir after reading: $!";
 
+ok(chdir $cwd, "able to change to $cwd");
+
 my $tmpdir = make_subhome_temp_directory();
 ok(  (-d $tmpdir), "$tmpdir exists");
 
@@ -34,4 +36,3 @@ shift(@tmpdirels) for @homedirels;
 ok(! exists $subdirs{$tmpdirels[0]}, 
     "directory $tmpdirels[0] did not previously exist");
 
-ok(chdir $cwd, "able to change to $cwd");

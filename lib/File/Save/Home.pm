@@ -3,7 +3,7 @@ require 5.006_001;
 use strict;
 use warnings;
 use Exporter ();
-our $VERSION     = '0.03_01';
+our $VERSION     = '0.04';
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw(
     get_home_directory
@@ -46,7 +46,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.03_01, released November 12, 2005.
+This document refers to version 0.04, released November 13, 2005.
 
 =head1 SYNOPSIS
 
@@ -221,10 +221,7 @@ sub restore_subhome_directory_status {
     my $desired_dir = $desired_dir_ref->{abs};
     my $subdir_top = $desired_dir_ref->{top};
     if (! defined $desired_dir_ref->{flag}) {
-#        rmtree((splitdir($subdir_top))[0], 0, 1);
         my $cwd = cwd();
-        chdir $home or die "Unable to change to $home: $!";
-#        unmkpath($subdir_top);
         find {
             bydepth   => 1,
             no_chdir  => 1,
@@ -235,11 +232,10 @@ sub restore_subhome_directory_status {
                     unlink or warn "Couldn't unlink $_: $!";
                 }
             }
-        } => ($subdir_top);
+        } => ("$home/$subdir_top");
         (! -d $desired_dir) 
             ? return 1
             : croak "Unable to restore directory created during test: $!";
-        chdir $cwd or die "Unable to change back to $cwd: $!";
     } else {
         return 1;
     }

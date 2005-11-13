@@ -2,9 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More 
-# tests => 16;
-qw(no_plan);
+use Test::More tests => 13;
 
 use_ok('File::Save::Home', qw|
     get_home_directory
@@ -16,14 +14,9 @@ use_ok('File::Save::Home', qw|
 | );
 use lib ("t/");
 use_ok('String::MkVarName', qw|make_varname|);
-use_ok('Cwd');
 
-my ($cwd, $homedir, @subdirs, $desired_dir_ref, $desired_dir, $target_ref );
+my ($homedir, @subdirs, $desired_dir_ref, $desired_dir, $target_ref );
 ok($homedir = get_home_directory(), 'home directory is defined');
-
-$cwd = cwd();
-
-ok(chdir $homedir, "able to change to $homedir");
 
 # Test a multilevel directory
 my $topdir = make_varname();
@@ -53,7 +46,4 @@ ok(! -d $desired_dir,
     "randomly named directory $desired_dir_ref->{abs} has been deleted");
 ok(! -d $topdir,
     "top directory $topdir has been deleted");
-
-ok(chdir $cwd, "able to change back to $cwd");
-
 
