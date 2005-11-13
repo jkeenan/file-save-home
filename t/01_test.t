@@ -3,8 +3,8 @@ use strict;
 use warnings;
 
 use Test::More 
-tests => 13;
-# qw(no_plan);
+# tests => 13;
+qw(no_plan);
 
 use_ok('File::Save::Home', qw|
     get_home_directory
@@ -37,6 +37,8 @@ ok(chdir $homedir, "able to change to $homedir");
     @subdirs = grep {-d $_ and !($_ eq '.' or $_ eq '..') } readdir DH;
     ok(closedir DH, "able to close directory handle to $homedir");
 }
+
+ok(chdir $cwd, "able to change back to $cwd");
 
 if (@subdirs) {
     my $testdir = $subdirs[int(rand(@subdirs))];

@@ -3,8 +3,8 @@ use strict;
 use warnings;
 
 use Test::More 
-tests => 18;
-# qw(no_plan);
+# tests => 18;
+qw(no_plan);
 
 use_ok('File::Save::Home', qw|
     get_home_directory
