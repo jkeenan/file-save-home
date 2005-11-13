@@ -241,19 +241,6 @@ sub restore_subhome_directory_status {
     }
 }
 
-sub unmkpath {
-    my $path = shift;
-    my ($vol, $dirs) = splitpath($path, 1);
-    my @dirs = splitdir($dirs);
-
-    while (@dirs) {
-        my $dir = catpath($vol, catdir(@dirs), '');
-        rmdir($dir);
-        pop(@dirs);
-    }
-}
-
-                                     
 =head2 C<make_subhome_temp_directory()>
 
 Creates a randomly named temporary directory underneath the home or
