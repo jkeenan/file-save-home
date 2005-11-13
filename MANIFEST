@@ -4,6 +4,7 @@ LICENSE
 Makefile.PL
 MANIFEST
 MANIFEST.SKIP
+META.yml			Module meta-data (added by MakeMaker)
 README
 t/01_test.t
 t/02_multilevel.t
