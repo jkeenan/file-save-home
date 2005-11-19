@@ -3,7 +3,7 @@ require 5.006_001;
 use strict;
 use warnings;
 use Exporter ();
-our $VERSION     = '0.04_01';
+our $VERSION     = '0.05';
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw(
     get_home_directory
@@ -46,7 +46,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.04_01, released November 21, 2005.
+This document refers to version 0.05, released November 19, 2005.
 
 =head1 SYNOPSIS
 

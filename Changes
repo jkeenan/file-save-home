@@ -1,5 +1,11 @@
 Changes for Perl extension File::Save::Home
 
+0.05 Sat Nov 19 12:42:46 EST 2005
+
+File::Save::Home's test suite now uses String::MkVarName v0.03 or later from
+CPAN, rather than a copy of that module stored under the t/ directory.
+Appropriate changes to Makefile.PL and t/*.t files made.
+
 0.04 Sun Nov 13 08:46:00 EST 2005
 
 Reworked restore_subhome_directory_status to use code from Perl Cookbook
