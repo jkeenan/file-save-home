@@ -10,7 +10,6 @@ use_ok('File::Save::Home', qw|
     make_subhome_directory
     restore_subhome_directory_status 
 | );
-use lib ("t/");
 use_ok('String::MkVarName', qw|make_varname|);
 use_ok('Cwd');
 
@@ -32,7 +31,8 @@ ok(chdir $cwd, "able to change back to $cwd");
 if (@subdirs) {
     my $testdir = $subdirs[int(rand(@subdirs))];
     $desired_dir_ref = get_subhome_directory_status($testdir);
-    ok($desired_dir_ref->{flag}, "confirm existence of $testdir under $homedir");
+    ok($desired_dir_ref->{flag}, 
+        "confirm existence of $testdir under $homedir");
 } else {
     $desired_dir_ref = get_subhome_directory_status(make_varname());
     ok(! defined $desired_dir_ref->{flag}, 

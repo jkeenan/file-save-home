@@ -12,7 +12,6 @@ use_ok('File::Save::Home', qw|
     conceal_target_file 
     reveal_target_file 
 | );
-use lib ("t/");
 use_ok('String::MkVarName', qw|make_varname|);
 
 my ($homedir, @subdirs, $desired_dir_ref, $desired_dir, $target_ref, $target );
