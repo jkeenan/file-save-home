@@ -12,7 +12,7 @@ use_ok('File::Save::Home', qw|
     conceal_target_file 
     reveal_target_file 
 | );
-use_ok('String::MkVarName', qw|make_varname|);
+use_ok('String::MkVarName');
 
 my ($homedir, @subdirs, $desired_dir_ref, $desired_dir, $target_ref );
 ok($homedir = get_home_directory(), 'home directory is defined');

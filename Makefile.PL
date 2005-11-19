@@ -14,5 +14,6 @@ WriteMakefile(
                      'File::Path'   => 0,
                      'Carp'         => 0,
                      'File::Temp'   => 0,
+                     'String::MkVarName' => 0.03,
                     },
 );
