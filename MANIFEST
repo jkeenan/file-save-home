@@ -10,4 +10,3 @@ t/01_test.t
 t/02_multilevel.t
 t/03_placefile.t
 t/04_tempdir.t
-t/String/MkVarName.pm
