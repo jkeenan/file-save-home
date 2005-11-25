@@ -10,7 +10,7 @@ use_ok('File::Save::Home', qw|
     make_subhome_directory
     restore_subhome_directory_status 
 | );
-use_ok('String::MkVarName');
+use_ok('String::PerlIdentifier');
 use_ok('Cwd');
 
 my ($cwd, $homedir, @subdirs, $desired_dir_ref, $desired_dir );

@@ -1,5 +1,10 @@
 Changes for Perl extension File::Save::Home
 
+0.06 Fri Nov 25 10:35:00 EST 2005
+
+No change in functionality.  New version prepared solely to accommodate change
+in name of String::MkVarName to String::PerlIdentifier.
+
 0.05 Sat Nov 19 12:42:46 EST 2005
 
 File::Save::Home's test suite now uses String::MkVarName v0.03 or later from

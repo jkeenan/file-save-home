@@ -1,14 +1,14 @@
 README for Perl extension File::Save::Home
 
-This document refers to version 0.05 of File::Save::Home.  
-This version was released November 19, 2005.
+This document refers to version 0.06 of File::Save::Home.  
+This version was released November 25, 2005.
 
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip File-Save-Home-0.05.tar.gz
-% tar xf File-Save-Home-0.05.tar
-% cd File-Save-Home-0.05
+% gunzip File-Save-Home-0.06.tar.gz
+% tar xf File-Save-Home-0.06.tar
+% cd File-Save-Home-0.06
 % perl Makefile.PL
 % make
 % make test
@@ -28,6 +28,11 @@ above:
 
 If you are installing this module on a Win32 system with 'nmake', 
 substitute 'nmake' for 'make' in the sequence of commands above.
+
+There is one CPAN module not in the Perl core distribution which is a
+prerequisite for File::Save::Home's test suite:  String::PerlIdentifier, by
+the same author.  This module is pure Perl and should install properly via the
+cpan utility.
 
 In sending e-mail to the maintainer, please put "File::Save::Home", 
 or "File-Save-Home" in the subject line.
