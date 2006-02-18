@@ -2,14 +2,14 @@
 use strict;
 use warnings;
 
-use Test::More tests =>  9;
+use Test::More tests =>  8;
 
 use_ok('File::Save::Home', qw|
     get_home_directory
     make_subhome_temp_directory 
 | );
 use_ok('File::Spec::Functions', qw| splitdir |);
-use_ok('File::Temp', qw| tempdir |);
+# use_ok('File::Temp', qw| tempdir |);
 use_ok('Cwd');
 
 
