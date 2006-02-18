@@ -1,4 +1,9 @@
 Changes for Perl extension File::Save::Home
+0.07 Fri Feb 17 19:42:05 EST 2006
+
+No change in functionality.  At suggestion of Rob Rothenberg, expanded
+documentation, particularly in ''SEE ALSO'' section, to reference other CPAN
+distributions which try to locate a user's home directory.
 
 0.06 Fri Nov 25 10:35:00 EST 2005
 
