@@ -3,7 +3,7 @@ require 5.006_001;
 use strict;
 use warnings;
 use Exporter ();
-our $VERSION     = '0.07';
+our $VERSION     = '0.08';
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw(
     get_home_directory
@@ -46,7 +46,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.07, released February 19, 2006.
+This document refers to version 0.08, released February 19, 2006.
 
 =head1 SYNOPSIS
 
@@ -63,6 +63,11 @@ This document refers to version 0.07, released February 19, 2006.
     $home_dir = get_home_directory();
 
     $desired_dir_ref = get_subhome_directory_status("desired/directory");
+
+    $desired_dir_ref = get_subhome_directory_status(
+        "desired/directory",
+        "pseudohome/directory"
+    );
 
     $desired_dir = make_subhome_directory($desired_dir_ref);
 
@@ -134,12 +139,36 @@ sub get_home_directory {
 
 =head2 C<get_subhome_directory_status()>
 
+=head3 Single argument version
+
 Takes as argument a string holding the name of a directory, either
 single-level (C<mydir>) or multi-level (C<path/to/mydir>).  Determines 
 whether that  directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
-then tacks on the path passed as argument. Returns a reference to a
-four-element hash whose keys are:
+then tacks on the path passed as argument.
+
+=head3 Two-argument version
+
+Suppose you want to determine the name of a user's home directory by some
+other route than C<get_home_directory()>.  Suppose, for example, that you're
+on Win32 and want to use the C<my_home()> method supplied by CPAN distribution
+File::HomeDir -- a method which returns a different result from that of our
+C<get_home_directory()> -- but you still want to use those File::Save::Home
+functions which normally call C<get_home_directory()> internally.  Or, suppose
+you want to supply an arbitrary path.
+
+You can now do so by supplying an I<optional second argument> to
+C<get_subhome_directory_status>.  This argument should be a valid path name
+for a directory to which you have write privileges.
+C<get_subhome_directory_status> will determine if the directory exists and, if
+so, determine whether the I<first> argument is a subdirectory of the I<second>
+argument.
+
+=head3 Both versions
+
+Whether you use the single argument version or the two-argument version,
+C<get_subhome_directory_status> returns a reference to a four-element hash 
+whose keys are:
 
 =over 4
 
@@ -166,7 +195,14 @@ The uppermost subdirectory passed as the argument to this function.
 
 sub get_subhome_directory_status {
     my $subdir = shift;
-    my $home = get_home_directory();
+    my ($pseudohome, $home);
+    $pseudohome = $_[0] if $_[0];
+    if (defined $pseudohome) {
+        -d $pseudohome or croak "$pseudohome is not a valid directory: $!";
+    }
+    $home = defined $pseudohome
+        ? $pseudohome
+        : get_home_directory();
     my $dirname = "$home/$subdir"; 
     my $subdir_top = (splitdir($subdir))[0];
     
