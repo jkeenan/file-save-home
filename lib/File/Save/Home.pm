@@ -46,7 +46,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.08, released February 19, 2006.
+This document refers to version 0.08, released February 23, 2006.
 
 =head1 SYNOPSIS
 
@@ -66,7 +66,7 @@ This document refers to version 0.08, released February 19, 2006.
 
     $desired_dir_ref = get_subhome_directory_status(
         "desired/directory",
-        "pseudohome/directory"
+        "pseudohome/directory",    # two-argument version
     );
 
     $desired_dir = make_subhome_directory($desired_dir_ref);
@@ -81,7 +81,11 @@ This document refers to version 0.08, released February 19, 2006.
 
     reveal_target_file($target_ref);
 
-    $tmpdir = make_subhome_temp_directory;
+    $tmpdir = make_subhome_temp_directory();
+
+    $tmpdir = make_subhome_temp_directory(
+        "pseudohome/directory",    # optional argument version
+    );
 
 =head1 DESCRIPTION
 
@@ -280,10 +284,24 @@ sub restore_subhome_directory_status {
 
 =head2 C<make_subhome_temp_directory()>
 
+=head3 Regular version:  no arguments
+
 Creates a randomly named temporary directory underneath the home or
-home-equivalent directory returned by C<get_home_directory()>.  This is
-accomplished by use of C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.  
-Returns the directory path if succesful; C<croak>s otherwise.
+home-equivalent directory returned by C<get_home_directory()>.  
+
+=head3 Optional argument version
+
+Creates a randomly named temporary directory underneath the directory supplied
+as the single argument.  This version is analogous to the two-argument verion
+of L</"get_subhome_directory_status()"> above.  You could use it if, for
+example, you wanted to use C<File::HomeDir->my_home()> to supply a value for
+the user's home directory instead of our C<get_home_directory()>.
+
+=head3 Both versions
+
+In both versions, the temporary subdirectory is created by calling 
+C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.  The function 
+returns the directory path if succesful; C<croak>s otherwise.
 
 B<Note:>  Any temporary directory so created remains in existence for 
 the duration of the program, but is deleted (along with all its contents) 
@@ -292,7 +310,16 @@ when the program exits.
 =cut
 
 sub make_subhome_temp_directory {
-    my $tdir = tempdir(DIR => get_home_directory(), CLEANUP => 1);
+    my ($pseudohome, $home);
+    $pseudohome = $_[0] if $_[0];
+    if (defined $pseudohome) {
+        -d $pseudohome or croak "$pseudohome is not a valid directory: $!";
+    }
+    $home = defined $pseudohome
+        ? $pseudohome
+        : get_home_directory();
+#    my $tdir = tempdir(DIR => get_home_directory(), CLEANUP => 1);
+    my $tdir = tempdir(DIR => $home, CLEANUP => 1);
     return $tdir ? $tdir : croak "Unable to create temp dir under home: $!";
 }
 
