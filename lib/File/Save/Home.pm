@@ -529,20 +529,59 @@ Perlmonks.  (See threads I<Installing a config file during module operation>
 (L<http://perlmonks.org/?node_id=481690>) and I<Win32 CSIDL_LOCAL_APPDATA>
 (L<http://perlmonks.org/?node_id=485902>).)  I adopted this approach in part
 because the people recommending it knew more about Windows than I did, and in
-part because File::HomeDir was not quite as mature as it has since become.  It
-is interesting that the I<other two> File::HomeDir methods listed above,
+part because File::HomeDir was not quite as mature as it has since become.  
+
+But don't trust me; trust Microsoft!  Here's their explanation for the use of
+CSIDL values in general and CSIDL_LOCAL_APPDATA() in particular:
+
+=over 4
+
+=item *
+
+I<CSIDL values provide a unique system-independent way
+to identify special folders used frequently by
+applications, but which may not have the same name or
+location on any given system. For example, the system
+folder may be ''C:\Windows'' on one system and
+''C:\Winnt'' on another. These constants are defined in
+Shlobj.h and Shfolder.h.>
+
+=item *
+
+I<CSIDL_LOCAL_APPDATA (0x001c)
+Version 5.0. The file system directory that serves as
+a data repository for local (nonroaming) applications.
+A typical path is C:\Documents and
+Settings\username\Local Settings\Application Data.>
+
+=back
+
+(Source:
+L<http://msdn.microsoft.com/library/default.asp?url=/library/en-us/shellcc/platform/shell/reference/enums/csidl.asp>.
+Link valid as of Feb 18 2006.  Thanks to Soren Andersen for reminding me of
+this citation.)
+
+It is interesting that the I<other two> File::HomeDir methods listed above,
 C<my_documents()> and C<my_data()> both rely on using a Win32 module to peer
 into the registry, albeit in a slightly different manner from
 C<File::Save::Home-E<gt>get_home_directory>.  TIMTOWTDI.
 
 In an event, File::Save::Home has a number of useful methods I<besides>
-C<get_home_directory()> which merit your consideration.
+C<get_home_directory()> which merit your consideration.  And, as noted above,
+you can supply any valid directory as an optional additional argument to the
+two File::Save::Home functions which normally default to calling
+C<get_home_directory> internally.
 
 =head2 File::HomeDir::Win32
 
 File::HomeDir::Win32 was originally written by Rob Rothenberg and is now
-maintained by Randy Kobes.  Because I have not yet fully installed it, I will 
-defer further comparison between it and File::Save::Home to a later date.
+maintained by Randy Kobes.  According to Adam Kennedy 
+(L<http://annocpan.org/~JKEENAN/File-Save-Home-0.07/lib/File/Save/Home.pm#note_636>),
+''The functionality in File::HomeDir::Win32 is gradually being merged into
+File::HomeDir over time and will eventually be deprecated (although left in
+place for compatibility purposes).''  Because I have not yet fully installed
+File::HomeDir::Win32, I will defer further comparison between it and 
+File::Save::Home to a later date.
 
 =head1 AUTHOR
 
@@ -578,6 +617,29 @@ it and/or modify it under the same terms as Perl itself.
 
 The full text of the license can be found in the
 LICENSE file included with this module.
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE SOFTWARE ''AS IS'' WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
+LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
+THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
 =cut
 

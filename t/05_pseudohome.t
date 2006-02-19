@@ -10,7 +10,6 @@ use_ok('File::Save::Home', qw|
     get_subhome_directory_status
     make_subhome_temp_directory 
 | );
-# use_ok('File::Spec::Functions', qw| splitdir |);
 use_ok('File::Temp', qw| tempdir |);
 use_ok('Cwd');
 use_ok('String::PerlIdentifier');
