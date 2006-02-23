@@ -5,9 +5,10 @@ use Test::More;
 if( $^O !~ /Win32/ ) {
     plan skip_all => 'Test irrelevant except on Win32';
 } else {
-#    plan tests => 1;
     plan qw(no_plan);
 }
+
+like($^O, qr/Win32/, "You're on Windows -- the greatest operating system to come out of Redmond, Washington!");
 
 SKIP: {
     eval { require File::HomeDir };
