@@ -1,12 +1,13 @@
 Changes for Perl extension File::Save::Home
 
-0.08 Fri Feb 17 21:56:02 EST 2006
+0.08 Wed Feb 22 22:14:24 EST 2006
 
 Modified get_subhome_directory_status() and make_subhome_temp_directory() so
 that each takes an optional additional argument which is name of a valid
 directory which user wishes to use as a ''pseudo-home-directory'' in place of
 the output of get_home_directory().  Wrote t/05_pseudohome.t to test this
-revised functionality.
+revised functionality.  Wrote t/06_Win32.t to make sure that this
+functionality works with File::HomeDir::my_home() on Windows.
 
 0.07 Fri Feb 17 19:42:05 EST 2006
 
