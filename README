@@ -1,14 +1,14 @@
 README for Perl extension File::Save::Home
 
-This document refers to version 0.08 of File::Save::Home.  
-This version was released February 23, 2006.
+This document refers to version 0.09 of File::Save::Home.  
+This version was released December 14, 2012.
 
 To install this module on your system, place the tarball archive file in a 
 temporary directory and call the following:
 
-% gunzip File-Save-Home-0.08.tar.gz
-% tar xf File-Save-Home-0.08.tar
-% cd File-Save-Home-0.08
+% gunzip File-Save-Home-0.09.tar.gz
+% tar xf File-Save-Home-0.09.tar
+% cd File-Save-Home-0.09
 % perl Makefile.PL
 % make
 % make test

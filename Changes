@@ -1,5 +1,9 @@
 Changes for Perl extension File::Save::Home
 
+0.09 Fri Dec 14 19:34:00 EXT 2012
+
+Two spelling corrections reported by Xavier Guimard.
+
 0.08 Wed Feb 22 22:14:24 EST 2006
 
 Modified get_subhome_directory_status() and make_subhome_temp_directory() so

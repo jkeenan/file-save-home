@@ -3,7 +3,7 @@ require 5.006_001;
 use strict;
 use warnings;
 use Exporter ();
-our $VERSION     = '0.08';
+our $VERSION     = '0.09';
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw(
     get_home_directory
@@ -46,7 +46,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.08, released February 23, 2006.
+This document refers to version 0.09, released December 14, 2012.
 
 =head1 SYNOPSIS
 
@@ -301,7 +301,7 @@ the user's home directory instead of our C<get_home_directory()>.
 
 In both versions, the temporary subdirectory is created by calling 
 C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.  The function 
-returns the directory path if succesful; C<croak>s otherwise.
+returns the directory path if successful; C<croak>s otherwise.
 
 B<Note:>  Any temporary directory so created remains in existence for 
 the duration of the program, but is deleted (along with all its contents) 
@@ -596,7 +596,7 @@ File::Save::Home has its origins in the maintenance revisions I was doing on
 CPAN distribution ExtUtils::ModuleMaker in the summer of 2005.  
 After I made a presentation about that distribution to the Toronto Perlmongers 
 on October 27, 2005, Michael Graham suggested that certain utility functions 
-could be extracted to a separate Perl extention for more general applicability. 
+could be extracted to a separate Perl extension for more general applicability. 
 This module is the implementation of Michael's suggestion.
 
 While I was developing those utility functions for ExtUtils::ModuleMaker, I
