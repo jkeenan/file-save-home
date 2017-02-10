@@ -37,6 +37,7 @@ use File::Temp qw| tempdir |;
 *ok = *Test::More::ok;
 use Cwd;
 use File::Find;
+use Data::Dump qw(pp);
 
 #################### DOCUMENTATION ###################
 
@@ -147,7 +148,7 @@ sub get_home_directory {
 
 Takes as argument a string holding the name of a directory, either
 single-level (C<mydir>) or multi-level (C<path/to/mydir>).  Determines
-whether that  directory already exists underneath the user's
+whether that directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
 then tacks on the path passed as argument.
 
@@ -182,12 +183,12 @@ The absolute path of the home directory.
 
 =item abs
 
-The absolute path of the specified directory.
+The absolute path of the directory specified as first argument to the function.
 
 =item flag
 
-A Boolean value indicating whether that directory already exists (a true value)
-or not (C<undef>).
+A Boolean value indicating whether the desired directory already exists (a
+true value) or not (C<undef>).
 
 =item top
 
@@ -258,26 +259,29 @@ it is left unchanged.
 
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
+pp($desired_dir_ref);
     my $home = $desired_dir_ref->{home};
+    croak "Home directory '$home' apparently lost"
+        unless (-d $home);
     my $desired_dir = $desired_dir_ref->{abs};
     my $subdir_top = $desired_dir_ref->{top};
     if (! defined $desired_dir_ref->{flag}) {
-        my $cwd = cwd();
         find {
             bydepth   => 1,
             no_chdir  => 1,
             wanted    => sub {
                 if (! -l && -d _) {
-                    rmdir  or warn "Couldn't rmdir $_: $!";
+                    rmdir  or croak "Couldn't rmdir $_: $!";
                 } else {
-                    unlink or warn "Couldn't unlink $_: $!";
+                    unlink or croak "Couldn't unlink $_: $!";
                 }
             }
-        } => (catdir($home,$subdir_top));
+        } => (catdir($home, $subdir_top));
         (! -d $desired_dir)
             ? return 1
             : croak "Unable to restore directory created during test: $!";
-    } else {
+    }
+    else {
         return 1;
     }
 }
