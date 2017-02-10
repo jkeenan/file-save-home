@@ -32,3 +32,4 @@ svndiff/
 ^htmlify
 ^MYMETA.*
 .git/
+^MANIFEST.bak

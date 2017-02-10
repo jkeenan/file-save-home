@@ -1,3 +1,4 @@
+.gitignore
 Changes
 lib/File/Save/Home.pm
 LICENSE
