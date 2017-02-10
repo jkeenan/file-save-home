@@ -9,19 +9,19 @@ our @EXPORT_OK   = qw(
     get_home_directory
     get_subhome_directory_status
     make_subhome_directory
-    restore_subhome_directory_status 
-    conceal_target_file 
-    reveal_target_file 
-    make_subhome_temp_directory 
+    restore_subhome_directory_status
+    conceal_target_file
+    reveal_target_file
+    make_subhome_temp_directory
 );
 our %EXPORT_TAGS = (
     subhome_status => [ qw|
         get_subhome_directory_status
-        restore_subhome_directory_status 
+        restore_subhome_directory_status
     | ],
     target => [ qw|
-        conceal_target_file 
-        reveal_target_file 
+        conceal_target_file
+        reveal_target_file
     | ],
 );
 use Carp;
@@ -54,10 +54,10 @@ This document refers to version 0.09, released December 14, 2012.
         get_home_directory
         get_subhome_directory_status
         make_subhome_directory
-        restore_subhome_directory_status 
-        conceal_target_file 
-        reveal_target_file 
-        make_subhome_temp_directory 
+        restore_subhome_directory_status
+        conceal_target_file
+        reveal_target_file
+        make_subhome_temp_directory
     );
 
     $home_dir = get_home_directory();
@@ -95,9 +95,9 @@ directory.  Can you do so safely?
 
 This Perl extension provides several functions which try to determine whether
 you can, indeed, safely create directories and files underneath a user's home
-directory.  Among other things, if you are placing a file in such a location 
-only temporarily -- say, for testing purposes -- you can temporarily hide 
-any already existing file with the same name and restore it to its original 
+directory.  Among other things, if you are placing a file in such a location
+only temporarily -- say, for testing purposes -- you can temporarily hide
+any already existing file with the same name and restore it to its original
 name and timestamps when you are done.
 
 =head1 USAGE
@@ -105,7 +105,7 @@ name and timestamps when you are done.
 =head2 C<get_home_directory()>
 
 Analyzes environmental information to determine whether there exists on the
-system a 'HOME' or 'home-equivalent' directory.  Takes no arguments.  Returns 
+system a 'HOME' or 'home-equivalent' directory.  Takes no arguments.  Returns
 that directory if it exists; C<croak>s otherwise.
 
 On Win32, this directory is the one returned by the following function from the F<Win32>module:
@@ -117,7 +117,7 @@ On Win32, this directory is the one returned by the following function from the 
 (For a further discussion of Win32, see below L</"SEE ALSO">.)
 
 On Unix-like systems, things are much simpler.  We simply check the value of
-C<$ENV{HOME}>.  We cannot do that on Win32 because C<$ENV{HOME}> is not 
+C<$ENV{HOME}>.  We cannot do that on Win32 because C<$ENV{HOME}> is not
 defined there.
 
 =cut
@@ -126,7 +126,7 @@ sub get_home_directory {
     my $realhome;
     if ($^O eq 'MSWin32') {
         require Win32;
-        Win32->import( qw(CSIDL_LOCAL_APPDATA) );  # 0x001c 
+        Win32->import( qw(CSIDL_LOCAL_APPDATA) );  # 0x001c
         $realhome =  Win32::GetFolderPath( CSIDL_LOCAL_APPDATA() );
         $realhome =~ s{ }{\ }g;
         return $realhome if (-d $realhome);
@@ -146,7 +146,7 @@ sub get_home_directory {
 =head3 Single argument version
 
 Takes as argument a string holding the name of a directory, either
-single-level (C<mydir>) or multi-level (C<path/to/mydir>).  Determines 
+single-level (C<mydir>) or multi-level (C<path/to/mydir>).  Determines
 whether that  directory already exists underneath the user's
 home or home-equivalent directory. Calls C<get_home_directory()> internally,
 then tacks on the path passed as argument.
@@ -171,7 +171,7 @@ argument.
 =head3 Both versions
 
 Whether you use the single argument version or the two-argument version,
-C<get_subhome_directory_status> returns a reference to a four-element hash 
+C<get_subhome_directory_status> returns a reference to a four-element hash
 whose keys are:
 
 =over 4
@@ -186,7 +186,7 @@ The absolute path of the specified directory.
 
 =item flag
 
-A Boolean value indicating whether that directory already exists (a true value) 
+A Boolean value indicating whether that directory already exists (a true value)
 or not (C<undef>).
 
 =item top
@@ -207,9 +207,9 @@ sub get_subhome_directory_status {
     $home = defined $pseudohome
         ? $pseudohome
         : get_home_directory();
-    my $dirname = "$home/$subdir"; 
+    my $dirname = catdir($home, $subdir);
     my $subdir_top = (splitdir($subdir))[0];
-    
+
     if (-d $dirname) {
         return {
             home    => $home,
@@ -248,10 +248,10 @@ sub make_subhome_directory {
 
 =head2 C<restore_subhome_directory_status()>
 
-Undoes C<make_subhome_directory()>, I<i.e.,> if there was no specified 
-directory under the user's home directory on the user's system before 
-testing, any such directory created during testing is removed.  On the 
-other hand, if there I<was> such a directory present before testing, 
+Undoes C<make_subhome_directory()>, I<i.e.,> if there was no specified
+directory under the user's home directory on the user's system before
+testing, any such directory created during testing is removed.  On the
+other hand, if there I<was> such a directory present before testing,
 it is left unchanged.
 
 =cut
@@ -273,8 +273,8 @@ sub restore_subhome_directory_status {
                     unlink or warn "Couldn't unlink $_: $!";
                 }
             }
-        } => ("$home/$subdir_top");
-        (! -d $desired_dir) 
+        } => (catdir($home,$subdir_top));
+        (! -d $desired_dir)
             ? return 1
             : croak "Unable to restore directory created during test: $!";
     } else {
@@ -287,7 +287,7 @@ sub restore_subhome_directory_status {
 =head3 Regular version:  no arguments
 
 Creates a randomly named temporary directory underneath the home or
-home-equivalent directory returned by C<get_home_directory()>.  
+home-equivalent directory returned by C<get_home_directory()>.
 
 =head3 Optional argument version
 
@@ -299,12 +299,12 @@ the user's home directory instead of our C<get_home_directory()>.
 
 =head3 Both versions
 
-In both versions, the temporary subdirectory is created by calling 
-C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.  The function 
+In both versions, the temporary subdirectory is created by calling
+C<File::Temp::tempdir (DIR => $home, CLEANUP => 1)>.  The function
 returns the directory path if successful; C<croak>s otherwise.
 
-B<Note:>  Any temporary directory so created remains in existence for 
-the duration of the program, but is deleted (along with all its contents) 
+B<Note:>  Any temporary directory so created remains in existence for
+the duration of the program, but is deleted (along with all its contents)
 when the program exits.
 
 =cut
@@ -343,7 +343,7 @@ exists.
 
 =item test
 
-Boolean value which, if turned on (C<1>), will cause the function, when 
+Boolean value which, if turned on (C<1>), will cause the function, when
 called, to run two C<Test::More::ok()> tests.  Defaults to off (C<0>).
 
 =back
@@ -411,10 +411,10 @@ Used in conjunction with C<conceal_target_file()> to restore the original
 status of the file targeted by C<conceal_target_file()>, I<i.e.,> renames the
 hidden file to its original name by removing the F<.hidden> suffix, thereby
 deleting any other file with the original name created between the calls tothe
-two functions.  C<croak>s if the hidden file cannot be renamed.  Takes as 
-argument the hash reference returned by C<conceal_target_file()>.  If the 
-value for the C<test> key in the hash passed as an argument to 
-C<conceal_target_file()> was true, then a call to C<reveal_target_file> 
+two functions.  C<croak>s if the hidden file cannot be renamed.  Takes as
+argument the hash reference returned by C<conceal_target_file()>.  If the
+value for the C<test> key in the hash passed as an argument to
+C<conceal_target_file()> was true, then a call to C<reveal_target_file>
 will run three C<Test::More::ok()> tests.
 
 =cut
@@ -425,12 +425,12 @@ sub reveal_target_file {
         rename $target_ref->{hidden}, $target_ref->{full},
             or croak "Unable to rename $target_ref->{hidden}: $!";
         if ($target_ref->{test}) {
-            ok(-f $target_ref->{full}, 
+            ok(-f $target_ref->{full},
                 "target file re-established");
-            ok(! -f $target_ref->{hidden}, 
+            ok(! -f $target_ref->{hidden},
                 "hidden target now gone");
-            ok( (utime $target_ref->{atime}, 
-                       $target_ref->{modtime}, 
+            ok( (utime $target_ref->{atime},
+                       $target_ref->{modtime},
                       ($target_ref->{full})
                 ), "atime and modtime of target file restored");
         }
@@ -470,7 +470,7 @@ Adam Kennedy.  As of version 0.52 its interface provides three methods for the
     $home = File::HomeDir->my_home;
     $docs = File::HomeDir->my_documents;
     $data = File::HomeDir->my_data;
-  
+
 When I ran these three methods on a Win2K Pro system running ActivePerl 8, I
 got these results:
 
@@ -500,7 +500,7 @@ the source code for each module.
 
 File::HomeDir's objective is to provide a value for a user's home directory on
 a wide variety of operating systems.  When invoked, it detects the operating
-system you're on and calls a subclassed module.  When used on a Win32 system, 
+system you're on and calls a subclassed module.  When used on a Win32 system,
 that subclass is called File::HomeDir::Windows (not to be confused with the
 separate CPAN distribution File::HomeDir::Win32).
 C<File::HomeDir::Windows-E<gt>my_home()> looks like this:
@@ -529,7 +529,7 @@ Perlmonks.  (See threads I<Installing a config file during module operation>
 (L<http://perlmonks.org/?node_id=481690>) and I<Win32 CSIDL_LOCAL_APPDATA>
 (L<http://perlmonks.org/?node_id=485902>).)  I adopted this approach in part
 because the people recommending it knew more about Windows than I did, and in
-part because File::HomeDir was not quite as mature as it has since become.  
+part because File::HomeDir was not quite as mature as it has since become.
 
 But don't trust me; trust Microsoft!  Here's their explanation for the use of
 CSIDL values in general and CSIDL_LOCAL_APPDATA() in particular:
@@ -575,12 +575,12 @@ C<get_home_directory> internally.
 =head2 File::HomeDir::Win32
 
 File::HomeDir::Win32 was originally written by Rob Rothenberg and is now
-maintained by Randy Kobes.  According to Adam Kennedy 
+maintained by Randy Kobes.  According to Adam Kennedy
 (L<http://annocpan.org/~JKEENAN/File-Save-Home-0.07/lib/File/Save/Home.pm#note_636>),
 ''The functionality in File::HomeDir::Win32 is gradually being merged into
 File::HomeDir over time and will eventually be deprecated (although left in
 place for compatibility purposes).''  Because I have not yet fully installed
-File::HomeDir::Win32, I will defer further comparison between it and 
+File::HomeDir::Win32, I will defer further comparison between it and
 File::Save::Home to a later date.
 
 =head1 AUTHOR
@@ -593,10 +593,10 @@ File::Save::Home to a later date.
 =head1 ACKNOWLEDGMENTS
 
 File::Save::Home has its origins in the maintenance revisions I was doing on
-CPAN distribution ExtUtils::ModuleMaker in the summer of 2005.  
-After I made a presentation about that distribution to the Toronto Perlmongers 
-on October 27, 2005, Michael Graham suggested that certain utility functions 
-could be extracted to a separate Perl extension for more general applicability. 
+CPAN distribution ExtUtils::ModuleMaker in the summer of 2005.
+After I made a presentation about that distribution to the Toronto Perlmongers
+on October 27, 2005, Michael Graham suggested that certain utility functions
+could be extracted to a separate Perl extension for more general applicability.
 This module is the implementation of Michael's suggestion.
 
 While I was developing those utility functions for ExtUtils::ModuleMaker, I
@@ -610,7 +610,7 @@ Adam Kennedy for responding to questions about File::HomeDir.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-06 James E. Keenan.  United States.  All rights reserved. 
+Copyright (c) 2005-06 James E. Keenan.  United States.  All rights reserved.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
