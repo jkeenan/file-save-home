@@ -2,7 +2,7 @@ Changes
 lib/File/Save/Home.pm
 LICENSE
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 MANIFEST.SKIP
 README
 t/01_test.t
