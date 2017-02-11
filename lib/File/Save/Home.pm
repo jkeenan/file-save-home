@@ -35,9 +35,7 @@ use File::Spec::Functions qw|
 |;
 use File::Temp qw| tempdir |;
 *ok = *Test::More::ok;
-use Cwd;
 use File::Find;
-use Data::Dump qw(pp);
 
 #################### DOCUMENTATION ###################
 
@@ -259,7 +257,6 @@ it is left unchanged.
 
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
-pp($desired_dir_ref);
     my $home = $desired_dir_ref->{home};
     croak "Home directory '$home' apparently lost"
         unless (-d $home);
@@ -322,7 +319,6 @@ sub make_subhome_temp_directory {
     $home = defined $pseudohome
         ? $pseudohome
         : get_home_directory();
-#    my $tdir = tempdir(DIR => get_home_directory(), CLEANUP => 1);
     my $tdir = tempdir(DIR => $home, CLEANUP => 1);
     return $tdir ? $tdir : croak "Unable to create temp dir under home: $!";
 }
