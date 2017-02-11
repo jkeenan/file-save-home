@@ -1,5 +1,12 @@
 Changes for Perl extension File::Save::Home
 
+0.10 Fri Feb 10 21:25:41 EST 2017
+
+Move into git for version control.  Establish github.com repository.
+In restore_subhome_directory_status(), die rather than simply warning
+when a directory or file can not be found for removal.  More use of
+catdir and catfile to compose paths.
+
 0.09 Fri Dec 14 19:34:00 EXT 2012
 
 Two spelling corrections reported by Xavier Guimard.
