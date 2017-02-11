@@ -1,4 +1,5 @@
 .gitignore
+.version_info.pl
 Changes
 lib/File/Save/Home.pm
 LICENSE
