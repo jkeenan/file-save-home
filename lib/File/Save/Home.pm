@@ -99,6 +99,61 @@ only temporarily -- say, for testing purposes -- you can temporarily hide
 any already existing file with the same name and restore it to its original
 name and timestamps when you are done.
 
+=head2 Limitations
+
+The preceding description was written in 2005.  Experience has shown that any
+claim that one can make about the B<safety> of the creation or deletion of
+directories and files underneath a user's home directory must be qualified.
+File::Save::Home is satisfactory for the use case for which it was originally
+designed, but there are other situations where it falls short.
+
+The original use case for which File::Save::Home was designed was to support
+the placement of B<personal preference files> in a user's home directory.
+Such personal preference files are often referred to as B<dot-rc files>
+because their names typically start with a C<.> character to render them
+hidden from commands like C<ls> and end in C<rc> much like C<.bashrc> or
+<.shrc>.  A developer using CPAN::Mini, for example, often makes use of
+C<.minicpanrc> to store the developer's preferred CPAN mirror.
+File::Save::Home was created specifically to support the creation of a
+C<.modulemakerrc> file by users of ExtUtils::ModuleMaker and a C<.podmultirc>
+file by users of Pod::Multi.  (ExtUtils::ModuleMaker and Pod::Multi are
+maintained by the author of File::Save::Home.)  These libraries are
+B<developer's tools>, I<i.e.,> they are intended to assist individual humans
+in software development rather than being used "in production."  As such,
+their use of dot-rc files implicitly assumes:
+
+=over 4
+
+=item *
+
+Only one user is concerned with the status of the directories and files,
+including dot-rc files, underneath the user's home directory.
+
+=item *
+
+Only one user has permissions to create, modify or remove directories and
+files underneath the user's home directory -- an assumption that is easily
+violated by a superuser such as C<root>.
+
+=item *
+
+The user is running processes to create, modify or remove directories and
+files underneath the user's home directory B<one-at-a-time>, C<i.e.,> the user
+is B<not> running such processes B<in parallel>.  Running such processes in
+parallel would raise the possibility, for example, of process trying to rename
+a dot-rc file that a second, parallel process had already deleted.
+
+=back
+
+When either the second or third assumption above is violated, we have the
+possibility of B<race conditions>
+(L<https://en.wikipedia.org/wiki/Race_condition>) and B<time of check to time
+of use (TOCTTOU) errors>
+(L<https://en.wikipedia.org/wiki/Time_of_check_to_time_of_use>).  Such
+conditions may lead to either spurious testing failures (I<e.g.,> when
+CPANtesteers run tests in parallel on libraries using File::Save::Home) or to
+security violations.
+
 =head1 USAGE
 
 =head2 C<get_home_directory()>
