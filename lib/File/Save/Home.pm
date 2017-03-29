@@ -257,7 +257,7 @@ it is left unchanged.
 
 sub restore_subhome_directory_status {
     my $desired_dir_ref = shift;
-    my $home = $desired_dir_ref->{home};
+    my $home = $desired_dir_ref->{home} || '';
     croak "Home directory '$home' apparently lost"
         unless (-d $home);
     my $desired_dir = $desired_dir_ref->{abs};
@@ -610,7 +610,7 @@ Adam Kennedy for responding to questions about File::HomeDir.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-06 James E. Keenan.  United States.  All rights reserved.
+Copyright (c) 2005-2017 James E. Keenan.  United States.  All rights reserved.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
