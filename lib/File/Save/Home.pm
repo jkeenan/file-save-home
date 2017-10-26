@@ -348,7 +348,7 @@ home-equivalent directory returned by C<get_home_directory()>.
 =head3 Optional argument version
 
 Creates a randomly named temporary directory underneath the directory supplied
-as the single argument.  This version is analogous to the two-argument verion
+as the single argument.  This version is analogous to the two-argument version
 of L</"get_subhome_directory_status()"> above.  You could use it if, for
 example, you wanted to use C<File::HomeDir->my_home()> to supply a value for
 the user's home directory instead of our C<get_home_directory()>.
@@ -662,6 +662,8 @@ from monks CountZero, Tanktalus, xdg and holli, among others.
 
 Thanks to Rob Rothenberg for prodding me to expand the SEE ALSO section and to
 Adam Kennedy for responding to questions about File::HomeDir.
+
+Thanks to Damyan Ivanov of Debian Perl Group for a patch.
 
 =head1 COPYRIGHT
 
