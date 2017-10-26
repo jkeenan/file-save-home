@@ -18,7 +18,7 @@ WriteMakefile(
                      'Test::Simple' => 0.44,
                     },
     ( $mm_ver < 6.63_03 ? 'BUILD_REQUIRES' : 'TEST_REQUIRES' ) => {
-                     'String::PerlIdentifier' => 0,
+                     'String::Random' => 0,
                     },
     ( $mm_ver < 6.46    ? ()               : (META_MERGE => {
         'meta-spec' => { version => 2 },

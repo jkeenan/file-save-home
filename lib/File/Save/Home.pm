@@ -663,7 +663,8 @@ from monks CountZero, Tanktalus, xdg and holli, among others.
 Thanks to Rob Rothenberg for prodding me to expand the SEE ALSO section and to
 Adam Kennedy for responding to questions about File::HomeDir.
 
-Thanks to Damyan Ivanov of Debian Perl Group for a patch.
+Thanks to Damyan Ivanov, Xavier Guimard and Gregor Herrman of Debian Perl
+Group for patches.
 
 =head1 COPYRIGHT
 
