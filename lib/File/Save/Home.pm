@@ -3,7 +3,7 @@ require 5.006_001;
 use strict;
 use warnings;
 use Exporter ();
-our $VERSION     = '0.11';
+our $VERSION     = '0.12';
 our @ISA         = qw(Exporter);
 our @EXPORT_OK   = qw(
     get_home_directory
@@ -45,7 +45,7 @@ File::Save::Home - Place file safely under user home directory
 
 =head1 VERSION
 
-This document refers to version 0.11, released October 26 2017.
+This document refers to version 0.12, released January 03 2026.
 
 =head1 SYNOPSIS
 
@@ -655,7 +655,7 @@ Group for patches.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2025 James E. Keenan.  United States.  All rights reserved.
+Copyright (c) 2005-2026 James E. Keenan.  United States.  All rights reserved.
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.
